@@ -42,7 +42,7 @@ export function LandingChoice({ onBrowse, onAdminSignIn }: LandingChoiceProps) {
           </div>
 
           <p className="text-sm text-muted-foreground font-sans mt-2 text-center tracking-[0.15em] uppercase">
-            drop the fits
+            Kill Em' All!
           </p>
         </div>
 

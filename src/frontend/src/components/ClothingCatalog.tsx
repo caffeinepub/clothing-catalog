@@ -191,6 +191,9 @@ export function ClothingCatalog({
       <footer className="border-t border-border mt-auto">
         <div className="h-px bg-primary/30 w-full" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 text-center">
+          <p className="text-xs text-muted-foreground font-sans tracking-widest uppercase mb-1">
+            Kill Em' All!
+          </p>
           <p className="text-xs text-muted-foreground font-sans tracking-widest uppercase">
             © {new Date().getFullYear()}. Built with{" "}
             <span aria-label="love">♥</span> using{" "}
