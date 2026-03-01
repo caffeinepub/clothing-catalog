@@ -19,11 +19,12 @@ export interface ClothingItem {
     imageBlob: ExternalBlob;
     name: string;
     description: string;
+    price?: string;
 }
 export interface backendInterface {
-    addClothingItem(id: string, name: string, description: string, imageBlob: ExternalBlob): Promise<void>;
+    addClothingItem(id: string, name: string, description: string, price: string | null, imageBlob: ExternalBlob): Promise<void>;
     deleteClothingItem(id: string): Promise<void>;
     getAllClothingItems(): Promise<Array<ClothingItem>>;
     getClothingItem(id: string): Promise<ClothingItem>;
-    updateClothingItem(id: string, name: string, description: string, imageBlob: ExternalBlob): Promise<void>;
+    updateClothingItem(id: string, name: string, description: string, price: string | null, imageBlob: ExternalBlob): Promise<void>;
 }

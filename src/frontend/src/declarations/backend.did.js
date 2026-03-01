@@ -25,6 +25,7 @@ export const ClothingItem = IDL.Record({
   'imageBlob' : ExternalBlob,
   'name' : IDL.Text,
   'description' : IDL.Text,
+  'price' : IDL.Opt(IDL.Text),
 });
 
 export const idlService = IDL.Service({
@@ -55,7 +56,7 @@ export const idlService = IDL.Service({
     ),
   '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
   'addClothingItem' : IDL.Func(
-      [IDL.Text, IDL.Text, IDL.Text, ExternalBlob],
+      [IDL.Text, IDL.Text, IDL.Text, IDL.Opt(IDL.Text), ExternalBlob],
       [],
       [],
     ),
@@ -63,7 +64,7 @@ export const idlService = IDL.Service({
   'getAllClothingItems' : IDL.Func([], [IDL.Vec(ClothingItem)], ['query']),
   'getClothingItem' : IDL.Func([IDL.Text], [ClothingItem], ['query']),
   'updateClothingItem' : IDL.Func(
-      [IDL.Text, IDL.Text, IDL.Text, ExternalBlob],
+      [IDL.Text, IDL.Text, IDL.Text, IDL.Opt(IDL.Text), ExternalBlob],
       [],
       [],
     ),
@@ -89,6 +90,7 @@ export const idlFactory = ({ IDL }) => {
     'imageBlob' : ExternalBlob,
     'name' : IDL.Text,
     'description' : IDL.Text,
+    'price' : IDL.Opt(IDL.Text),
   });
   
   return IDL.Service({
@@ -119,7 +121,7 @@ export const idlFactory = ({ IDL }) => {
       ),
     '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
     'addClothingItem' : IDL.Func(
-        [IDL.Text, IDL.Text, IDL.Text, ExternalBlob],
+        [IDL.Text, IDL.Text, IDL.Text, IDL.Opt(IDL.Text), ExternalBlob],
         [],
         [],
       ),
@@ -127,7 +129,7 @@ export const idlFactory = ({ IDL }) => {
     'getAllClothingItems' : IDL.Func([], [IDL.Vec(ClothingItem)], ['query']),
     'getClothingItem' : IDL.Func([IDL.Text], [ClothingItem], ['query']),
     'updateClothingItem' : IDL.Func(
-        [IDL.Text, IDL.Text, IDL.Text, ExternalBlob],
+        [IDL.Text, IDL.Text, IDL.Text, IDL.Opt(IDL.Text), ExternalBlob],
         [],
         [],
       ),

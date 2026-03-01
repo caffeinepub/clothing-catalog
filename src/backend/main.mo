@@ -5,7 +5,9 @@ import Runtime "mo:core/Runtime";
 import Order "mo:core/Order";
 import MixinStorage "blob-storage/Mixin";
 import Storage "blob-storage/Storage";
+import Migration "migration";
 
+(with migration = Migration.run)
 actor {
   include MixinStorage();
 
@@ -13,6 +15,7 @@ actor {
     id : Text;
     name : Text;
     description : Text;
+    price : ?Text;
     imageBlob : Storage.ExternalBlob;
   };
 
@@ -24,11 +27,12 @@ actor {
 
   let clothingCatalog = Map.empty<Text, ClothingItem>();
 
-  public shared ({ caller }) func addClothingItem(id : Text, name : Text, description : Text, imageBlob : Storage.ExternalBlob) : async () {
+  public shared ({ caller }) func addClothingItem(id : Text, name : Text, description : Text, price : ?Text, imageBlob : Storage.ExternalBlob) : async () {
     let item : ClothingItem = {
       id;
       name;
       description;
+      price;
       imageBlob;
     };
     clothingCatalog.add(id, item);
@@ -45,7 +49,7 @@ actor {
     };
   };
 
-  public shared ({ caller }) func updateClothingItem(id : Text, name : Text, description : Text, imageBlob : Storage.ExternalBlob) : async () {
+  public shared ({ caller }) func updateClothingItem(id : Text, name : Text, description : Text, price : ?Text, imageBlob : Storage.ExternalBlob) : async () {
     switch (clothingCatalog.get(id)) {
       case (null) { Runtime.trap("Clothing item does not exist") };
       case (?_) {
@@ -53,6 +57,7 @@ actor {
           id;
           name;
           description;
+          price;
           imageBlob;
         };
         clothingCatalog.add(id, newItem);

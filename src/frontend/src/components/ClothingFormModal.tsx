@@ -24,6 +24,7 @@ interface ClothingFormModalProps {
 interface FormState {
   name: string;
   description: string;
+  price: string;
   imageFile: File | null;
   imagePreview: string | null;
 }
@@ -31,6 +32,7 @@ interface FormState {
 const initialFormState: FormState = {
   name: "",
   description: "",
+  price: "",
   imageFile: null,
   imagePreview: null,
 };
@@ -58,6 +60,7 @@ export function ClothingFormModal({
       setForm({
         name: editingItem.name,
         description: editingItem.description,
+        price: editingItem.price ?? "",
         imageFile: null,
         imagePreview: existingUrl || null,
       });
@@ -131,11 +134,14 @@ export function ClothingFormModal({
         return;
       }
 
+      const price = form.price.trim() || null;
+
       if (editingItem) {
         await updateMutation.mutateAsync({
           id: editingItem.id,
           name: form.name.trim(),
           description: form.description.trim(),
+          price,
           imageBlob,
         });
         toast.success("Item updated successfully");
@@ -145,6 +151,7 @@ export function ClothingFormModal({
           id,
           name: form.name.trim(),
           description: form.description.trim(),
+          price,
           imageBlob,
         });
         toast.success("Item added to your wardrobe");
@@ -270,6 +277,26 @@ export function ClothingFormModal({
                 className="rounded-none font-sans"
                 autoComplete="off"
                 required
+              />
+            </div>
+
+            {/* Price */}
+            <div className="space-y-2">
+              <Label
+                htmlFor="item-price"
+                className="font-sans text-xs uppercase tracking-wider text-muted-foreground font-semibold"
+              >
+                Price
+              </Label>
+              <Input
+                id="item-price"
+                value={form.price}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, price: e.target.value }))
+                }
+                placeholder="e.g. 29.99"
+                className="rounded-none font-sans"
+                autoComplete="off"
               />
             </div>
 

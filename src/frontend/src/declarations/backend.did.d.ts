@@ -15,6 +15,7 @@ export interface ClothingItem {
   'imageBlob' : ExternalBlob,
   'name' : string,
   'description' : string,
+  'price' : [] | [string],
 }
 export type ExternalBlob = Uint8Array;
 export interface _CaffeineStorageCreateCertificateResult {
@@ -45,14 +46,14 @@ export interface _SERVICE {
   >,
   '_caffeineStorageUpdateGatewayPrincipals' : ActorMethod<[], undefined>,
   'addClothingItem' : ActorMethod<
-    [string, string, string, ExternalBlob],
+    [string, string, string, [] | [string], ExternalBlob],
     undefined
   >,
   'deleteClothingItem' : ActorMethod<[string], undefined>,
   'getAllClothingItems' : ActorMethod<[], Array<ClothingItem>>,
   'getClothingItem' : ActorMethod<[string], ClothingItem>,
   'updateClothingItem' : ActorMethod<
-    [string, string, string, ExternalBlob],
+    [string, string, string, [] | [string], ExternalBlob],
     undefined
   >,
 }

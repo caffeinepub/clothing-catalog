@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Plus, Shirt } from "lucide-react";
+import { LogOut, Plus, Shirt } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { toast } from "sonner";
 import type { ClothingItem } from "../backend.d";
@@ -11,8 +11,10 @@ import {
 import { ClothingCard } from "./ClothingCard";
 
 interface ClothingCatalogProps {
+  isAdmin: boolean;
   onAddItem: () => void;
   onEditItem: (item: ClothingItem) => void;
+  onSignOut: () => void;
 }
 
 const containerVariants = {
@@ -32,8 +34,10 @@ const itemVariants = {
 };
 
 export function ClothingCatalog({
+  isAdmin,
   onAddItem,
   onEditItem,
+  onSignOut,
 }: ClothingCatalogProps) {
   const { data: items = [], isLoading } = useGetAllClothingItems();
   const deleteMutation = useDeleteClothingItem();
@@ -60,13 +64,29 @@ export function ClothingCatalog({
               My Wardrobe
             </h1>
           </div>
-          <Button
-            onClick={onAddItem}
-            className="gap-2 rounded-none font-sans text-sm tracking-wide uppercase font-semibold px-5"
-          >
-            <Plus className="w-4 h-4" />
-            Add Item
-          </Button>
+          <div className="flex items-center gap-3">
+            {isAdmin && (
+              <>
+                <Button
+                  onClick={onAddItem}
+                  className="gap-2 rounded-none font-sans text-sm tracking-wide uppercase font-semibold px-5"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Item
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={onSignOut}
+                  className="gap-1.5 rounded-none font-sans text-xs text-muted-foreground hover:text-foreground"
+                  title="Sign out"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  Sign out
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       </header>
 
@@ -105,7 +125,7 @@ export function ClothingCatalog({
             ))}
           </div>
         ) : items.length === 0 ? (
-          <EmptyState onAddItem={onAddItem} />
+          <EmptyState isAdmin={isAdmin} onAddItem={onAddItem} />
         ) : (
           <>
             <div className="flex items-center justify-between mb-6">
@@ -125,6 +145,7 @@ export function ClothingCatalog({
                   <motion.div key={item.id} variants={itemVariants} layout>
                     <ClothingCard
                       item={item}
+                      isAdmin={isAdmin}
                       onEdit={() => onEditItem(item)}
                       onDelete={() => handleDelete(item.id)}
                       isDeleting={deleteMutation.isPending}
@@ -158,7 +179,13 @@ export function ClothingCatalog({
   );
 }
 
-function EmptyState({ onAddItem }: { onAddItem: () => void }) {
+function EmptyState({
+  isAdmin,
+  onAddItem,
+}: {
+  isAdmin: boolean;
+  onAddItem: () => void;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -180,16 +207,19 @@ function EmptyState({ onAddItem }: { onAddItem: () => void }) {
         Your wardrobe is empty
       </h2>
       <p className="text-muted-foreground font-sans text-sm max-w-xs leading-relaxed mb-8">
-        Start building your personal collection by adding your first clothing
-        piece — a photo, a name, and a few words about it.
+        {isAdmin
+          ? "Start building your personal collection by adding your first clothing piece — a photo, a name, and a few words about it."
+          : "No pieces have been added to the collection yet."}
       </p>
-      <Button
-        onClick={onAddItem}
-        className="gap-2 rounded-none font-sans text-sm tracking-wide uppercase font-semibold px-6 py-3 h-auto"
-      >
-        <Plus className="w-4 h-4" />
-        Add Your First Piece
-      </Button>
+      {isAdmin && (
+        <Button
+          onClick={onAddItem}
+          className="gap-2 rounded-none font-sans text-sm tracking-wide uppercase font-semibold px-6 py-3 h-auto"
+        >
+          <Plus className="w-4 h-4" />
+          Add Your First Piece
+        </Button>
+      )}
     </motion.div>
   );
 }

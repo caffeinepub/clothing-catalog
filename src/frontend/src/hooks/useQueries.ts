@@ -19,6 +19,7 @@ interface AddClothingItemParams {
   id: string;
   name: string;
   description: string;
+  price: string | null;
   imageBlob: ExternalBlob;
 }
 
@@ -31,10 +32,11 @@ export function useAddClothingItem() {
       id,
       name,
       description,
+      price,
       imageBlob,
     }: AddClothingItemParams) => {
       if (!actor) throw new Error("Actor not available");
-      await actor.addClothingItem(id, name, description, imageBlob);
+      await actor.addClothingItem(id, name, description, price, imageBlob);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["clothingItems"] });
@@ -46,6 +48,7 @@ interface UpdateClothingItemParams {
   id: string;
   name: string;
   description: string;
+  price: string | null;
   imageBlob: ExternalBlob;
 }
 
@@ -58,10 +61,11 @@ export function useUpdateClothingItem() {
       id,
       name,
       description,
+      price,
       imageBlob,
     }: UpdateClothingItemParams) => {
       if (!actor) throw new Error("Actor not available");
-      await actor.updateClothingItem(id, name, description, imageBlob);
+      await actor.updateClothingItem(id, name, description, price, imageBlob);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["clothingItems"] });
