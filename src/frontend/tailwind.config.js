@@ -16,8 +16,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Playfair Display"', "Georgia", "serif"],
-        sans: ['"General Sans"', "system-ui", "sans-serif"],
+        display: ['"Bricolage Grotesque"', "Impact", "sans-serif"],
+        sans: ['"Geist Mono"', '"Courier New"', "monospace"],
+        mono: ['"Geist Mono"', '"Courier New"', "monospace"],
       },
       colors: {
         border: "oklch(var(--border))",
@@ -73,13 +74,13 @@ export default {
       },
       borderRadius: {
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        md: "calc(var(--radius))",
+        sm: "calc(var(--radius))",
       },
       boxShadow: {
-        xs: "0 1px 2px 0 rgba(0,0,0,0.05)",
-        card: "0 2px 8px 0 rgba(60,40,20,0.07), 0 0 0 1px rgba(60,40,20,0.04)",
-        "card-hover": "0 8px 24px 0 rgba(60,40,20,0.12), 0 0 0 1px rgba(60,40,20,0.06)",
+        xs: "0 1px 2px 0 rgba(0,0,0,0.4)",
+        card: "0 2px 8px 0 rgba(80,0,0,0.4), 0 0 0 1px rgba(150,30,30,0.15)",
+        "card-hover": "0 8px 24px 0 rgba(120,0,0,0.5), 0 0 0 1px rgba(180,40,40,0.25)",
       },
       keyframes: {
         "accordion-down": {
