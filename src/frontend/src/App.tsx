@@ -8,11 +8,12 @@ import { ClothingDetailPage } from "./components/ClothingDetailPage";
 import { ClothingFormModal } from "./components/ClothingFormModal";
 import { LandingChoice } from "./components/LandingChoice";
 import { LoginPage } from "./components/LoginPage";
-import { useDeleteClothingItem } from "./hooks/useQueries";
+import { useDeleteClothingItem, usePrewarmActor } from "./hooks/useQueries";
 
 type AppMode = "choose" | "guest" | "admin-login";
 
 function AppInner() {
+  usePrewarmActor(); // kick off actor initialization immediately on mount
   const { isAdmin, logout } = useAuth();
   const [mode, setMode] = useState<AppMode>("choose");
   const [isModalOpen, setIsModalOpen] = useState(false);

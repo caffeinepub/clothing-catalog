@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { ExternalBlob } from "../backend";
 import type { ClothingItem } from "../backend.d";
+import { useActor } from "../hooks/useActor";
 import { useAddClothingItem, useUpdateClothingItem } from "../hooks/useQueries";
 
 interface ClothingFormModalProps {
@@ -46,6 +47,9 @@ export function ClothingFormModal({
   const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const prevPreviewRef = useRef<string | null>(null);
+
+  const { actor, isFetching: isActorFetching } = useActor();
+  const isActorReady = !!actor && !isActorFetching;
 
   const addMutation = useAddClothingItem();
   const updateMutation = useUpdateClothingItem();
@@ -335,9 +339,14 @@ export function ClothingFormModal({
             <Button
               type="submit"
               className="flex-1 rounded-none font-sans text-sm tracking-wide uppercase font-semibold"
-              disabled={isPending}
+              disabled={isPending || !isActorReady}
             >
-              {isPending ? (
+              {!isActorReady ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Connecting...
+                </>
+              ) : isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   {isEditing ? "Saving…" : "Adding…"}

@@ -1,39 +1,23 @@
-# Clothing Catalog
+# Dead and Worn
 
 ## Current State
-- Backend stores clothing items with: id, name, description, imageBlob
-- Frontend shows a catalog grid with add/edit/delete actions available to all visitors
-- No authentication or access control exists
-- No price field on items
+Full-stack clothing catalog with admin login (slimkid3/AliceInChains92), guest browse mode, landing choice page, item detail pages, and a ClothingFormModal for add/edit. The `useActor` hook initializes an ICP actor asynchronously via React Query; `useAddClothingItem` and `useUpdateClothingItem` check `if (!actor) throw new Error("Actor not available")`. If the actor hasn't resolved when the admin submits the form, the add/edit silently fails or throws.
 
 ## Requested Changes (Diff)
 
 ### Add
-- A `price` field (optional Text) to ClothingItem
-- A simple username/password login system on the frontend (hardcoded credentials: username=slimkid3, password=AliceInChains92)
-- A `LoginPage` component shown when the user is not authenticated
-- Auth state stored in sessionStorage so it persists across page refreshes but clears on tab close
-- Backend `addClothingItem`, `updateClothingItem`, `deleteClothingItem` updated to accept a `price` field
-- Price input field in the ClothingFormModal
-- Price displayed on ClothingCard
+- Actor readiness guard in `ClothingFormModal`: disable the submit button and show a loading state while actor is still initializing (`isFetching` is true or `actor` is null)
+- Actor readiness guard in `useAddClothingItem` and `useUpdateClothingItem`: wait for actor before mutating, or surface a clear error
 
 ### Modify
-- `ClothingCatalog`: hide "Add Item" button and edit/delete controls when not authenticated (visitors can browse, only admin can modify)
-- `ClothingFormModal`: add price field
-- `ClothingCard`: display price if present; hide edit/delete buttons when not authenticated
-- `App.tsx`: wrap app with auth context; show LoginPage or catalog based on auth state
-- All backend mutation functions updated to include price parameter
+- `useQueries.ts`: expose `isFetching` from `useActor` in mutation hooks so callers can check if actor is ready
+- `ClothingFormModal.tsx`: import `useActor` hook and disable submit + show spinner while actor is not ready
+- `ClothingCatalog.tsx`: pre-warm the actor on mount so it is ready when admin opens the form (no cold start delay)
 
 ### Remove
 - Nothing removed
 
 ## Implementation Plan
-1. Update `main.mo`: add optional `price` field to ClothingItem, update add/update/delete functions to accept price
-2. Regenerate backend bindings
-3. Create `AuthContext.tsx` with login/logout state, sessionStorage persistence, and hardcoded credential check
-4. Create `LoginPage.tsx` with username/password form
-5. Update `App.tsx` to use AuthContext, show LoginPage when logged out
-6. Update `ClothingFormModal.tsx` to include price input field
-7. Update `ClothingCard.tsx` to show price, accept `isAdmin` prop to conditionally show edit/delete
-8. Update `ClothingCatalog.tsx` to accept `isAdmin` prop and pass it down; hide Add Item button when not admin
-9. Update `useQueries.ts` to pass price through mutations
+1. In `useQueries.ts`, update `useAddClothingItem` and `useUpdateClothingItem` to also return `isActorReady` flag based on whether actor exists and is not fetching
+2. In `ClothingFormModal.tsx`, call `useActor()` directly to get actor readiness; disable submit button and show "Loading..." while actor is initializing
+3. Ensure `ClothingCatalog.tsx` calls `useGetAllClothingItems` (already does) which triggers actor initialization eagerly on catalog mount, pre-warming before the modal is opened

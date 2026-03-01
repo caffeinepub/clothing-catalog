@@ -73,6 +73,10 @@ export function useUpdateClothingItem() {
   });
 }
 
+export function usePrewarmActor() {
+  useActor(); // calling this triggers the actor query to initialize early
+}
+
 export function useDeleteClothingItem() {
   const { actor } = useActor();
   const queryClient = useQueryClient();
